@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Swift - Roblox Executor</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #eee;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      min-height: 100vh;
+      min-width: 100vw;
+    }
+
+    .container {
+      background: #121212dd;
+      border-radius: 0; /* No rounding so it fully covers */
+      box-shadow: none; /* Remove shadow for full page effect */
+      width: 100vw;
+      height: 100vh;
+      padding: 70px 120px;
+      text-align: center;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      animation: fadeInUp 0.9s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header: logo + title */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 65px;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      width: 110px;
+      height: 110px;
+      background: #222;
+      padding: 18px;
+      border-radius: 20px;
+      box-shadow: 0 0 24px #66ccffaa;
+      object-fit: contain;
+      user-select: none;
+      filter: drop-shadow(0 0 3px #66ccffaa);
+      transition: filter 0.3s ease;
+      flex-shrink: 0;
+    }
+    .logo:hover {
+      filter: drop-shadow(0 0 14px #66ccffcc);
+    }
+
+    header h1 {
+      font-weight: 900;
+      font-size: 4.8rem;
+      color: #66ccff;
+      letter-spacing: 3.5px;
+      text-shadow: 0 0 18px #66ccffbb;
+      user-select: none;
+      white-space: nowrap;
+      line-height: 1;
+      transition: color 0.3s ease;
+    }
+
+    header h1:hover {
+      color: #55aadd;
+      text-shadow: 0 0 24px #55aaddcc;
+    }
+
+    /* Buttons container */
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 42px;
+      margin-bottom: 80px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      border: none;
+      padding: 26px 85px;
+      font-size: 1.6rem;
+      font-weight: 900;
+      border-radius: 70px;
+      cursor: pointer;
+      box-shadow: 0 14px 42px #66ccffcc;
+      transition: all 0.35s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      user-select: none;
+      min-width: 240px;
+      background-size: 220% 100%;
+      background-position: left;
+      will-change: transform, box-shadow, background-position;
+    }
+
+    .download-btn {
+      background: linear-gradient(90deg, #66ccff 0%, #55aadd 100%);
+      color: #121212;
+      box-shadow: 0 14px 42px #66ccffdd;
+      background-position: right;
+    }
+
+    .download-btn:hover {
+      background-position: left;
+      box-shadow: 0 18px 56px #4499dddd;
+      transform: translateY(-5px);
+    }
+
+    .discord-btn {
+      background: #5865f2;
+      color: white;
+      box-shadow: 0 14px 42px #5865f2cc;
+    }
+
+    .discord-btn:hover {
+      background: #4752c4;
+      box-shadow: 0 18px 56px #4752c4cc;
+      transform: translateY(-5px);
+    }
+
+    .btn img {
+      width: 32px;
+      height: 32px;
+      user-select: none;
+    }
+
+    /* Features Section */
+    .features {
+      max-width: 880px;
+      margin: 0 auto 40px;
+      color: #ccc;
+      user-select: none;
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    .features h2 {
+      font-size: 3.6rem;
+      font-weight: 700;
+      margin-bottom: 22px;
+      color: #66ccff;
+      text-align: center;
+      text-shadow: 0 0 12px #66ccffaa;
+    }
+
+    .features p.subtitle {
+      font-size: 1.4rem;
+      font-style: italic;
+      text-align: center;
+      margin-bottom: 45px;
+      color: #a0cfffcc;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 36px;
+    }
+
+    .feature-card {
+      background: #1e1e1e;
+      border-radius: 20px;
+      padding: 34px 38px;
+      box-shadow: 0 0 28px #66ccff55;
+      transition: box-shadow 0.4s ease;
+      cursor: default;
+      user-select: none;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 0 44px #66ccffcc;
+    }
+
+    .feature-card h3 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #66ccff;
+      line-height: 1.1;
+    }
+
+    .feature-card p {
+      font-size: 1.15rem;
+      color: #bbb;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      color: #555;
+      font-size: 1rem;
+      text-align: center;
+      user-select: none;
+      margin-top: 20px;
+      letter-spacing: 0.08em;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container" role="main" tabindex="0">
+    <header>
+      <img src="icon6.ico" alt="Swift Logo" class="logo" />
+      <h1>Swift</h1>
+    </header>
+
+    <nav class="btn-group" aria-label="Download and Discord links">
+      <a href="https://mega.nz/file/HE8DDQRJ#OzujHMuRlcslc1mk73dtNyw-g_zGk7Vn912l8_lyf2c" 
+         class="btn download-btn" target="_blank" rel="noopener noreferrer" download>
+        Download Swift
+      </a>
+
+      <a href="https://discord.gg/getswiftgg" 
+         class="btn discord-btn" target="_blank" rel="noopener noreferrer" aria-label="Join Swift Discord">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord Icon" />
+        Discord
+      </a>
+    </nav>
+
+    <section class="features" aria-label="Features">
+      <h2>Why Use Swift?</h2>
+      <p class="subtitle">Every reason to choose Swift, none to doubt it.</p>
+
+      <div class="features-grid">
+        <article class="feature-card" tabindex="0">
+          <h3>100% Free</h3>
+          <p>Enjoy premium-level scripting at no cost — Swift is free for all.</p>
+        </article>
+
+        <article class="feature-card" tabindex="0">
+          <h3>Always Improving</h3>
+          <p>Swift is here for the long run and just keeps getting better.</p>
+        </article>
+
+        <article class="feature-card" tabindex="0">
+          <h3>Fast Updates</h3>
+          <p>Swift is always up to date, so you never have to wait.</p>
+        </article>
+
+        <article class="feature-card" tabindex="0">
+          <h3>Customizable</h3>
+          <p>Fully customizable, giving you complete control over Swift.</p>
+        </article>
+
+        <article class="feature-card" tabindex="0">
+          <h3>Premium Support</h3>
+          <p>Need help? Enjoy premium support at no cost.</p>
+        </article>
+
+        <article class="feature-card" tabindex="0">
+          <h3>100% UNC</h3>
+          <p>Despite being completely free, Swift offers 100% UNC & sUNC.</p>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      &copy; 2025 Swift. All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>
